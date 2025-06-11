@@ -29,6 +29,13 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/email")
+    public ResponseEntity<User> getUserByEmail(@RequestBody String email) {
+        return userService.getUserByEmail(email)
+                .map(user -> ResponseEntity.ok().body(user))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public User addUser(@RequestBody User user) {
         return userService.addUser(user);
