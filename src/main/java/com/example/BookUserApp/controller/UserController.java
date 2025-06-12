@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -30,10 +31,21 @@ public class UserController {
     }
 
     @PostMapping("/email")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+    public ResponseEntity<User> getUserByEmail(@Valid @RequestBody Map<String, String> request) {
+        String email = request.get("email");
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email must not be blank");
+        }
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            throw new IllegalArgumentException("Email format is invalid");
+        }
+
         User user = userService.getUserByEmail(email);
         return ResponseEntity.ok(user);
     }
+
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) {

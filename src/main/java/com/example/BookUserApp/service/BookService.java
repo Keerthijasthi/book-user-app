@@ -21,10 +21,18 @@ public class BookService {
     }
 
     public List<Book> getBooksByAuthor(String author) {
-        return bookRepo.findByAuthor(author);
+        List<Book> books = bookRepo.findByAuthor(author);
+        if (books.isEmpty()) {
+            throw new IllegalArgumentException("No books found for author: " + author + ". Please enter a valid/full name.");
+        }
+        return books;
     }
 
+
     public Book addBook(Book book) {
+        if (book.getId() != null && bookRepo.existsById(book.getId())) {
+            throw new IllegalArgumentException("Book with ID " + book.getId() + " already exists");
+        }
         return bookRepo.save(book);
     }
 

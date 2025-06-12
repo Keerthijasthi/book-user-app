@@ -29,10 +29,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    // Handle user not found
+//    // In GlobalExceptionHandler.java
+//    @ExceptionHandler(UserNotFoundException.class)
+//    public ResponseEntity<Map<String, String>> handleUserNotFound(UserNotFoundException ex) {
+//        Map<String, String> error = Map.of("message", ex.getMessage());
+//        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+//    }
+//
+//    // Handle illegal arguments like duplicate ID
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
+//        Map<String, String> error = Map.of("errorMessage", ex.getMessage());
+//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+//    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleUserNotFound(UserNotFoundException ex) {
-        Map<String, String> error = Map.of("errorMessage", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

@@ -27,10 +27,14 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return userRepo.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(-1L)); // or customize exception for email search
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
 
+
     public User addUser(User user) {
+        if (user.getId() != null && userRepo.existsById(user.getId())) {
+            throw new IllegalArgumentException("User with ID " + user.getId() + " already exists");
+        }
         return userRepo.save(user);
     }
 
