@@ -2,6 +2,7 @@ package com.example.BookUserApp.controller;
 
 import com.example.BookUserApp.model.Book;
 import com.example.BookUserApp.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +29,14 @@ public class BookController {
     }
 
     @PostMapping
-    public Book addBook(@RequestBody Book book) {
+    public Book addBook(@Valid @RequestBody Book book) {
         return bookService.addBook(book);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
-        return bookService.updateBook(id, book)
-                .map(updatedBook -> ResponseEntity.ok().body(updatedBook))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @Valid @RequestBody Book book) {
+        Book updated = bookService.updateBook(id, book);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")

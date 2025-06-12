@@ -1,11 +1,11 @@
 package com.example.BookUserApp.service;
 
+import com.example.BookUserApp.exception.BookNotFoundException;
 import com.example.BookUserApp.model.Book;
 import com.example.BookUserApp.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookService {
@@ -28,17 +28,20 @@ public class BookService {
         return bookRepo.save(book);
     }
 
-    public Optional<Book> updateBook(Long id, Book updatedBook) {
+    public Book updateBook(Long id, Book updatedBook) {
         return bookRepo.findById(id).map(book -> {
             book.setTitle(updatedBook.getTitle());
             book.setAuthor(updatedBook.getAuthor());
             book.setIsbn(updatedBook.getIsbn());
             book.setPublishedDate(updatedBook.getPublishedDate());
             return bookRepo.save(book);
-        });
+        }).orElseThrow(() -> new BookNotFoundException(id));
     }
 
     public void deleteBook(Long id) {
+        if (!bookRepo.existsById(id)) {
+            throw new BookNotFoundException(id);
+        }
         bookRepo.deleteById(id);
     }
 }
