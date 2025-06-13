@@ -21,6 +21,13 @@ public class BookService {
     }
 
     public List<Book> getBooksByAuthor(String author) {
+        if (author == null || author.trim().isEmpty()) {
+            throw new IllegalArgumentException("Author name must not be null or blank");
+        }
+
+        if (!author.matches("^[a-zA-Z\\s]+$")) {
+            throw new IllegalArgumentException("Author name must contain only alphabetic characters");
+        }
         List<Book> books = bookRepo.findByAuthor(author);
         if (books.isEmpty()) {
             throw new IllegalArgumentException("No books found for author: " + author + ". Please enter a valid/full name.");

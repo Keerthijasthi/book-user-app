@@ -4,7 +4,6 @@ import com.example.BookUserApp.exception.UserNotFoundException;
 import com.example.BookUserApp.model.User;
 import com.example.BookUserApp.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
